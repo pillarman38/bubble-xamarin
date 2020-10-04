@@ -21,7 +21,11 @@ namespace bubble.Views
         public string backdropPhotoUrl { get; set; }
         public string overview { get; set; }
     }
-
+    public class LoginObj
+    {
+        public bool res { get; set; }
+        public string user { get; set; }
+    }
     public partial class AboutPage : ContentPage
     {
         private const string Url = "http://192.168.1.86:3001/api/management/getarticles";
@@ -64,7 +68,13 @@ namespace bubble.Views
             var httpResponse = await client.SendAsync(request);
 
             var result = await httpResponse.Content.ReadAsStringAsync();
-            Console.WriteLine(result);
+            
+            var br = JsonConvert.DeserializeObject<LoginObj>(result);
+            Console.WriteLine(br.res);
+            if(br.res == true)
+            {
+                await Navigation.PushAsync(new HomePage(br));
+            }
         }
         void refresher(object sender, System.EventArgs e)
         {
